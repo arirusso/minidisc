@@ -35,7 +35,7 @@ describe MiniDisc::Discover do
     context "from discovery" do
 
       before(:each) do
-        @name = "d-test_service"
+        @name = "minidisc-test_service"
         @host = "testservice.local."
         @port = "8080"
         service = {
@@ -44,21 +44,50 @@ describe MiniDisc::Discover do
           port: @port
         }
         expect(MiniDisc::Discover::Network).to(receive(:services_with_timeout).at_least(:once).and_return([service]))
-        @destinations = MiniDisc::Discover.all
       end
 
-      it "populates" do
-        expect(@destinations).to_not(be_nil)
-        expect(@destinations).to_not(be_empty)
+      context "with id matching" do
+
+        before(:each) do
+          @destinations = MiniDisc::Discover.all(match: /minidisc\-.+/)
+        end
+
+        it "populates" do
+          expect(@destinations).to_not(be_nil)
+          expect(@destinations).to_not(be_empty)
+        end
+
+        it "has correct data" do
+          expect(@destinations.count).to(eq(1))
+          destination = @destinations.first
+          expect(destination).to(be_kind_of(MiniDisc::Discover))
+          expect(destination.id).to(eq(@name))
+          expect(destination.host).to(eq(@host))
+          expect(destination.port).to(eq(@port))
+        end
+
       end
 
-      it "has correct data" do
-        expect(@destinations.count).to(eq(1))
-        destination = @destinations.first
-        expect(destination).to(be_kind_of(MiniDisc::Discover))
-        expect(destination.id).to(eq(@name))
-        expect(destination.host).to(eq(@host))
-        expect(destination.port).to(eq(@port))
+      context "without id matching" do
+
+        before(:each) do
+          @destinations = MiniDisc::Discover.all
+        end
+
+        it "populates" do
+          expect(@destinations).to_not(be_nil)
+          expect(@destinations).to_not(be_empty)
+        end
+
+        it "has correct data" do
+          expect(@destinations.count).to(eq(1))
+          destination = @destinations.first
+          expect(destination).to(be_kind_of(MiniDisc::Discover))
+          expect(destination.id).to(eq(@name))
+          expect(destination.host).to(eq(@host))
+          expect(destination.port).to(eq(@port))
+        end
+
       end
 
     end
@@ -68,7 +97,7 @@ describe MiniDisc::Discover do
   context "#to_h" do
 
     before(:each) do
-      @id = "d-test"
+      @id = "minidisc-test"
       @host = "test.local."
       @port = 8000
       @destination = MiniDisc::Discover.new(@id, @host, port: @port)

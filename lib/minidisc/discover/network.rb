@@ -1,3 +1,5 @@
+require "timeout"
+
 module MiniDisc
 
   class Discover

@@ -14,11 +14,11 @@ module MiniDisc
     end
 
     # @param [Integer] port
-    def initialize(protocol, port)
-      @id = build_id
+    def initialize(protocol, port, options = {})
+      @id = options[:id] || object_id.to_s
       @port = port
       @protocol = protocol
-      populate_logger
+      populate_logger(options)
     end
 
     # Announce this service
@@ -26,20 +26,16 @@ module MiniDisc
     def announce
       DNSSD.register(@id, @protocol, nil, @port) do
         properties = "id=#{@id} port=#{@port} protocol=#{@protocol}"
-        @logger.info("MiniDisc::Discovery#announce: #{properties}")
+        @logger.puts("MiniDisc::Discovery#announce: #{properties}")
       end
       true
     end
 
     private
 
-    def build_id
-      "b-#{object_id}"
-    end
-
-    def populate_logger
+    def populate_logger(options = {})
       logfile = File.join("log", "discovery.log")
-      @logger = $> #Logger.new(logfile)
+      @logger = options[:logger] || $> #Logger.new(logfile)
     end
 
   end
