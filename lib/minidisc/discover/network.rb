@@ -6,16 +6,21 @@ module MiniDisc
 
     module Network
 
-      TIMEOUT_LIMIT = 2
+      DEFAULT_TIMEOUT_LIMIT = 2
 
       extend self
 
-      def services_with_timeout
-        Timeout::timeout(TIMEOUT_LIMIT) { services }
+      # @param [Hash] options
+      # @option options [Integer] :timeout Timeout in seconds
+      # @return [Array<Hash>]
+      def services_with_timeout(options = {})
+        timeout = options.fetch(:timeout, DEFAULT_TIMEOUT_LIMIT)
+        Timeout::timeout(timeout) { services }
       rescue Timeout::Error => e
         []
       end
 
+      # @return [Array<Hash>]
       def services
         Thread.abort_on_exception = true
         replies = {}
