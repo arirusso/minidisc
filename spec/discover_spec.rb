@@ -1,91 +1,89 @@
 require "helper"
 
 describe MiniDisc::Discover do
-
   context ".all" do
-
     context "from override file" do
-
-      before(:each) do
-        @host = "something.local."
-        @port = "80"
-        config_service = {
-          host: @host,
-          port: @port
+      let!(:host) { "something.local." }
+      let!(:port) { "80" }
+      let!(:config_service) do
+        {
+          host: host,
+          port: port
         }
-        @destinations = MiniDisc::Discover.all(override: [config_service])
+      end
+
+      let(:destinations) do
+         MiniDisc::Discover.all(override: [config_service])
       end
 
       it "populates" do
-        expect(@destinations).to_not(be_nil)
-        expect(@destinations).to_not(be_empty)
+        expect(destinations).to_not(be_nil)
+        expect(destinations).to_not(be_empty)
       end
 
       it "has correct data" do
-        expect(@destinations.count).to(eq(1))
-        destination = @destinations.first
+        expect(destinations.count).to(eq(1))
+        destination = destinations.first
         expect(destination).to(be_kind_of(MiniDisc::Discover))
         expect(destination.id).to(eq("override_1"))
-        expect(destination.host).to(eq(@host))
-        expect(destination.port).to(eq(@port))
+        expect(destination.host).to(eq(host))
+        expect(destination.port).to(eq(port))
       end
 
     end
 
     context "from discovery" do
+      let!(:name) { "minidisc-test_service" }
+      let!(:host) { "testservice.local." }
+      let!(:port) { "8080" }
+      let!(:service) do
+        {
+          name: name,
+          target: host,
+          port: port
+        }
+      end
 
       before(:each) do
-        @name = "minidisc-test_service"
-        @host = "testservice.local."
-        @port = "8080"
-        service = {
-          name: @name,
-          target: @host,
-          port: @port
-        }
         expect(MiniDisc::Discover::Network).to(receive(:services_with_timeout).at_least(:once).and_return([service]))
       end
 
       context "with id matching" do
-
-        before(:each) do
-          @destinations = MiniDisc::Discover.all(match: /minidisc\-.+/)
+        let(:destinations) do
+          MiniDisc::Discover.all(match: /minidisc\-.+/)
         end
 
         it "populates" do
-          expect(@destinations).to_not(be_nil)
-          expect(@destinations).to_not(be_empty)
+          expect(destinations).to_not(be_nil)
+          expect(destinations).to_not(be_empty)
         end
 
         it "has correct data" do
-          expect(@destinations.count).to(eq(1))
-          destination = @destinations.first
+          expect(destinations.count).to(eq(1))
+          destination = destinations.first
           expect(destination).to(be_kind_of(MiniDisc::Discover))
-          expect(destination.id).to(eq(@name))
-          expect(destination.host).to(eq(@host))
-          expect(destination.port).to(eq(@port))
+          expect(destination.id).to(eq(name))
+          expect(destination.host).to(eq(host))
+          expect(destination.port).to(eq(port))
         end
 
       end
 
       context "without id matching" do
-
-        before(:each) do
-          @destinations = MiniDisc::Discover.all
-        end
+        let(:destinations) { MiniDisc::Discover.all }
 
         it "populates" do
-          expect(@destinations).to_not(be_nil)
-          expect(@destinations).to_not(be_empty)
+          expect(destinations).to_not(be_nil)
+          expect(destinations).to_not(be_empty)
         end
 
         it "has correct data" do
-          expect(@destinations.count).to(eq(1))
-          destination = @destinations.first
+          expect(destinations.count).to(eq(1))
+          destination = destinations.first
           expect(destination).to(be_kind_of(MiniDisc::Discover))
-          expect(destination.id).to(eq(@name))
-          expect(destination.host).to(eq(@host))
-          expect(destination.port).to(eq(@port))
+          expect(destination.id).to(eq(name))
+          expect(destination.host).to(eq(host))
+          expect(destination.port).to(eq(port))
         end
 
       end
@@ -95,7 +93,6 @@ describe MiniDisc::Discover do
   end
 
   context "#to_h" do
-
     before(:each) do
       @id = "minidisc-test"
       @host = "test.local."
@@ -121,7 +118,5 @@ describe MiniDisc::Discover do
       expect(@hash[:host]).to(eq(@host))
       expect(@hash[:port]).to(eq(@port))
     end
-
   end
-
 end
