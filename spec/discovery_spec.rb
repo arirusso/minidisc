@@ -1,7 +1,6 @@
 require "helper"
 
 describe MiniDisc::Discovery do
-
   let!(:port) { 4040 }
   let!(:protocol) { :http }
   let(:discovery) { MiniDisc::Discovery.new(protocol, port) }
@@ -24,7 +23,7 @@ describe MiniDisc::Discovery do
     let(:args) do
       [discovery.id, MiniDisc::Protocol.find(protocol), nil, port]
     end
-    
+
     before(:each) do
       expect(DNSSD).to(receive(:register).with(*args).and_return(true))
     end

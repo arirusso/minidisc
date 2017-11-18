@@ -1,7 +1,9 @@
 require "helper"
 
 describe MiniDisc::Discover do
+
   context ".all" do
+
     context "from override file" do
       let!(:host) { "something.local." }
       let!(:port) { "80" }
@@ -29,7 +31,6 @@ describe MiniDisc::Discover do
         expect(destination.host).to(eq(host))
         expect(destination.port).to(eq(port))
       end
-
     end
 
     context "from discovery" do
@@ -66,7 +67,6 @@ describe MiniDisc::Discover do
           expect(destination.host).to(eq(host))
           expect(destination.port).to(eq(port))
         end
-
       end
 
       context "without id matching" do
@@ -85,38 +85,37 @@ describe MiniDisc::Discover do
           expect(destination.host).to(eq(host))
           expect(destination.port).to(eq(port))
         end
-
       end
-
     end
-
   end
 
   context "#to_h" do
-    before(:each) do
-      @id = "minidisc-test"
-      @host = "test.local."
-      @port = 8000
-      @destination = MiniDisc::Discover.new(@id, @host, port: @port)
-      @hash = @destination.to_h
+    let!(:id) { "minidisc-test" }
+    let!(:host) { "test.local." }
+    let!(:port) { 8000 }
+    let!(:destination) do
+      MiniDisc::Discover.new(id, host, port: port)
     end
+    let(:hash) { destination.to_h }
 
     it "converts to hash" do
-      expect(@hash[:id]).to_not(be_nil)
-      expect(@hash[:host]).to_not(be_nil)
-      expect(@hash[:port]).to_not(be_nil)
+      expect(hash).to_not(be_nil)
+      expect(hash).to(be_kind_of(Hash))
+      expect(hash[:id]).to_not(be_nil)
+      expect(hash[:host]).to_not(be_nil)
+      expect(hash[:port]).to_not(be_nil)
     end
 
     it "matches object" do
-      expect(@hash[:id]).to(eq(@destination.id))
-      expect(@hash[:host]).to(eq(@destination.host))
-      expect(@hash[:port]).to(eq(@destination.port))
+      expect(hash[:id]).to(eq(destination.id))
+      expect(hash[:host]).to(eq(destination.host))
+      expect(hash[:port]).to(eq(destination.port))
     end
 
     it "has correct data" do
-      expect(@hash[:id]).to(eq(@id))
-      expect(@hash[:host]).to(eq(@host))
-      expect(@hash[:port]).to(eq(@port))
+      expect(hash[:id]).to(eq(id))
+      expect(hash[:host]).to(eq(host))
+      expect(hash[:port]).to(eq(port))
     end
   end
 end
