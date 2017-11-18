@@ -22,9 +22,9 @@ module MiniDisc
 
     class << self
 
-      def services(protocol, options = {})
+      def services(protocol, options = {}, &block)
         ensure_initialized(options)
-        discover(protocol, options)
+        discover(protocol, options, &block)
         @destinations
       end
 
@@ -35,20 +35,21 @@ module MiniDisc
         @destinations ||= []
       end
 
-      def discover(protocol, options = {})
+      def discover(protocol, options = {}, &block)
         @destinations = if options[:override].nil?
-          from_discovery(protocol)
+          from_discovery(protocol, &block)
         else
-          from_override(options[:override])
+          from_override(options[:override], &block)
         end
       end
 
-      def from_override(services)
+      def from_override(services, &block)
         i = 0;
         services = services.map do |service|
           new("override_#{i += 1}", service[:host], port: service[:port])
         end
         @logger.puts("Destinations: Overriding discovery with #{services.count} services")
+        yield(services) if block_given?
         services
       end
 
@@ -57,17 +58,18 @@ module MiniDisc
           match_on == service_name
       end
 
-      def from_discovery(protocol, options = {})
+      def from_discovery(protocol, options = {}, &block)
         services = Network.services_with_timeout(protocol)
-        unless options[:match].nil?
+        unless options[:id].nil?
           services.select! do |service|
-            match?(options[:match], service[:name])
+            match?(options[:id], service[:name])
           end
         end
         services = services.map do |service|
           new(service[:name], service[:target], port: service[:port])
         end
         @logger.puts("Destinations: Discovered #{services.count} services")
+        yield(services) if block_given?
         services
       end
 
