@@ -6,12 +6,12 @@ module MiniDisc
 
     module Network
 
-      def initialize(protocol)
-        @protocol = protocol
-      end
+      TIMEOUT_LIMIT = 2
+
+      extend self
 
       def services_with_timeout
-        Timeout::timeout(2) { services }
+        Timeout::timeout(TIMEOUT_LIMIT) { services }
       rescue Timeout::Error => e
         []
       end
