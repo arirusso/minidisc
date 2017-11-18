@@ -52,11 +52,16 @@ module MiniDisc
         services
       end
 
+      def match?(match_on, service_name)
+        match_on.kind_of?(Regex) && service_name.match(match_on) ||
+          match_on == service_name
+      end
+
       def from_discovery(protocol, options = {})
         services = Network.services_with_timeout(protocol)
         unless options[:match].nil?
           services.select! do |service|
-            service[:name].match(options[:match])
+            match?(options[:match], service[:name])
           end
         end
         services = services.map do |service|
