@@ -1,7 +1,7 @@
 require "dnssd"
 
+require "minidisc/discover"
 require "minidisc/discovery"
-require "minidisc/destination"
 
 module MiniDisc
 

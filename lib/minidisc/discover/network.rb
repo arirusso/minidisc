@@ -1,10 +1,8 @@
-require "minidisc/destination/discover/override"
-
 module MiniDisc
 
-  class Destination
+  class Discover
 
-    module Discover
+    module Network
 
       def initialize(protocol)
         @protocol = protocol

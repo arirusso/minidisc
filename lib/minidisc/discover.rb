@@ -1,8 +1,8 @@
-require "minidisc/destination/discover"
+require "minidisc/discover/network"
 
 module MiniDisc
 
-  class Destination
+  class Discover
 
     attr_reader :id, :host, :port
 
@@ -22,26 +22,25 @@ module MiniDisc
 
     class << self
 
-      def all
+      def all(options = {})
         @destinations ||= []
-        populate
+        populate(options)
         @destinations
       end
 
       private
 
-      def populate
-        @override = Discover::Override.new
-        @destinations = if @override.exists?
-          from_config
-        else
+      def populate(options = {})
+        @destinations = if options[:override].nil?
           from_discovery
+        else
+          from_override(options[:override])
         end
       end
 
-      def from_config
+      def from_override(services)
         i = 0;
-        services = @override.services.map do |service|
+        services = services.map do |service|
           new("override_#{i += 1}", service[:host], port: service[:port])
         end
         puts "Destinations: Overriding discovery with #{services.count} services"
@@ -49,7 +48,7 @@ module MiniDisc
       end
 
       def from_discovery
-        services = Discover.services_with_timeout
+        services = Network.services_with_timeout
         services.select! do |service|
           service[:name].match(/d\-.+/)
         end
