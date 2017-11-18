@@ -1,7 +1,7 @@
 require "helper"
 
 describe MiniDisc::Discover do
-  describe ".all" do
+  describe ".services" do
 
     context "from override file" do
       let!(:host) { "something.local." }
@@ -14,7 +14,7 @@ describe MiniDisc::Discover do
       end
 
       let(:destinations) do
-         MiniDisc::Discover.all(override: [config_service])
+         MiniDisc::Discover.services(:http, override: [config_service])
       end
 
       it "populates" do
@@ -50,7 +50,7 @@ describe MiniDisc::Discover do
 
       context "with id matching" do
         let(:destinations) do
-          MiniDisc::Discover.all(match: /minidisc\-.+/)
+          MiniDisc::Discover.services(:http, match: /minidisc\-.+/)
         end
 
         it "populates" do
@@ -69,7 +69,7 @@ describe MiniDisc::Discover do
       end
 
       context "without id matching" do
-        let(:destinations) { MiniDisc::Discover.all }
+        let(:destinations) { MiniDisc::Discover.services(:http) }
 
         it "populates" do
           expect(destinations).to_not(be_nil)

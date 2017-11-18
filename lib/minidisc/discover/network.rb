@@ -13,19 +13,19 @@ module MiniDisc
       # @param [Hash] options
       # @option options [Integer] :timeout Timeout in seconds
       # @return [Array<Hash>]
-      def services_with_timeout(options = {})
+      def services_with_timeout(protocol, options = {})
         timeout = options.fetch(:timeout, DEFAULT_TIMEOUT_LIMIT)
-        Timeout::timeout(timeout) { services }
+        Timeout::timeout(timeout) { services(protocol) }
       rescue Timeout::Error => e
         []
       end
 
       # @return [Array<Hash>]
-      def services
+      def services(protocol)
         Thread.abort_on_exception = true
         replies = {}
 
-        DNSSD.browse!(@protocol) do |reply|
+        DNSSD.browse!(protocol) do |reply|
           replies[reply.name] = reply
           if !reply.flags.more_coming?
             available_replies = replies.select do |_, service|
