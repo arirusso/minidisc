@@ -5,7 +5,7 @@ describe MiniDisc::Discovery do
   let!(:protocol) { :http }
   let(:discovery) { MiniDisc::Discovery.new(protocol, port) }
 
-  context "#initialize" do
+  describe "#initialize" do
     it "populates" do
       expect(discovery.id).to_not(be_nil)
       expect(discovery.logger).to_not(be_nil)
@@ -19,7 +19,7 @@ describe MiniDisc::Discovery do
     end
   end
 
-  context "#announce" do
+  describe "#announce" do
     let(:args) do
       [discovery.id, MiniDisc::Protocol.find(protocol), nil, port]
     end

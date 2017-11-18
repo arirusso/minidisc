@@ -1,8 +1,7 @@
 require "helper"
 
 describe MiniDisc::Discover do
-
-  context ".all" do
+  describe ".all" do
 
     context "from override file" do
       let!(:host) { "something.local." }
@@ -89,7 +88,7 @@ describe MiniDisc::Discover do
     end
   end
 
-  context "#to_h" do
+  describe "#to_h" do
     let!(:id) { "minidisc-test" }
     let!(:host) { "test.local." }
     let!(:port) { 8000 }
