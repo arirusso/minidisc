@@ -17,7 +17,7 @@ module MiniDisc
     def initialize(protocol, port, options = {})
       @id = options[:id] || object_id.to_s
       @port = port
-      @protocol = protocol
+      @protocol = Protocol.find(protocol)
       populate_logger(options)
     end
 

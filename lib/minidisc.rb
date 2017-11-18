@@ -1,5 +1,7 @@
 require "dnssd"
 
+require "minidisc/protocol"
+
 require "minidisc/discover"
 require "minidisc/discovery"
 
