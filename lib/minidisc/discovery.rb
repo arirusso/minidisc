@@ -7,8 +7,8 @@ module MiniDisc
     # Announce this service
     # @param [Integer] port
     # @return [Discovery]
-    def self.announce(port)
-      discovery = new(port)
+    def self.announce(protocol, port, options = {})
+      discovery = new(protocol, port, options = {})
       discovery.announce
       discovery
     end
