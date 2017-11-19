@@ -19,7 +19,7 @@ describe MiniDisc::Discovery do
     end
   end
 
-  describe "#announce" do
+  describe "#register" do
     let(:args) do
       [discovery.id, MiniDisc::Protocol.find(protocol), nil, port]
     end
@@ -28,8 +28,8 @@ describe MiniDisc::Discovery do
       expect(DNSSD).to(receive(:register).with(*args).and_return(true))
     end
 
-    it "announces and returns true" do
-      expect(discovery.announce).to(be(true))
+    it "registers and returns true" do
+      expect(discovery.register).to(be(true))
     end
   end
 

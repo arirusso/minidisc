@@ -14,7 +14,7 @@ module MiniDisc
     extend self
 
     def add(protocol, port, options = {})
-      Discovery.accounce(protocol, port, options)
+      Discovery.register(protocol, port, options)
     end
 
     def find_all(protocol, options = {})

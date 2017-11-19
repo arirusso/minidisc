@@ -4,12 +4,12 @@ module MiniDisc
 
     attr_reader :id, :logger, :port
 
-    # Announce this service
+    # register this service
     # @param [Integer] port
     # @return [Discovery]
-    def self.announce(protocol, port, options = {})
+    def self.register(protocol, port, options = {})
       discovery = new(protocol, port, options = {})
-      discovery.announce
+      discovery.register
       discovery
     end
 
@@ -21,12 +21,12 @@ module MiniDisc
       populate_logger(options)
     end
 
-    # Announce this service
+    # register this service
     # @return [Boolean]
-    def announce
+    def register
       DNSSD.register(@id, @protocol, nil, @port) do
         properties = "id=#{@id} port=#{@port} protocol=#{@protocol}"
-        @logger.puts("MiniDisc::Discovery#announce: #{properties}")
+        @logger.puts("MiniDisc::Discovery#register: #{properties}")
       end
       true
     end
