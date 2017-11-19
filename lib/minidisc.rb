@@ -1,9 +1,9 @@
 require "dnssd"
 
 require "minidisc/protocol"
+require "minidisc/registry"
 
 require "minidisc/discover"
-require "minidisc/discovery"
 
 module MiniDisc
 

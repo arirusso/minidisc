@@ -1,20 +1,18 @@
 require "helper"
 
-describe MiniDisc::Discovery do
+describe MiniDisc::Registry do
   let!(:port) { 4040 }
   let!(:protocol) { :http }
-  let(:discovery) { MiniDisc::Discovery.new(protocol, port) }
+  let(:discovery) { MiniDisc::Registry::Service.new(protocol, port) }
 
   describe "#initialize" do
     it "populates" do
       expect(discovery.id).to_not(be_nil)
-      expect(discovery.logger).to_not(be_nil)
       expect(discovery.port).to_not(be_nil)
     end
 
     it "has correct values" do
       expect(discovery.id).to(include(discovery.object_id.to_s))
-      #expect(@discovery.logger).to(be_kind_of(Logger))
       expect(discovery.port).to(eq(port))
     end
   end
