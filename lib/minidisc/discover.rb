@@ -22,9 +22,9 @@ module MiniDisc
 
     class << self
 
-      def services(protocol, options = {}, &block)
+      def services(service_type, options = {}, &block)
         ensure_initialized(options)
-        discover(protocol, options, &block)
+        discover(service_type, options, &block)
         @destinations
       end
 
@@ -35,9 +35,9 @@ module MiniDisc
         @destinations ||= []
       end
 
-      def discover(protocol, options = {}, &block)
+      def discover(service_type, options = {}, &block)
         @destinations = if options[:override].nil?
-          from_discovery(protocol, &block)
+          from_discovery(service_type, &block)
         else
           from_override(options[:override], &block)
         end
@@ -58,8 +58,8 @@ module MiniDisc
           match_on == service_name
       end
 
-      def from_discovery(protocol, options = {}, &block)
-        services = Network.services_with_timeout(protocol)
+      def from_discovery(service_type, options = {}, &block)
+        services = Network.services_with_timeout(service_type)
         unless options[:id].nil?
           services.select! do |service|
             match?(options[:id], service[:name])

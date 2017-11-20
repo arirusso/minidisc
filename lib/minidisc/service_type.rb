@@ -1,14 +1,14 @@
 module MiniDisc
 
-  module Protocol
+  module ServiceType
 
-    PROTOCOL = {
+    TYPE = {
       http: "_http._tcp",
       telnet: "_telnet._tcp"
     }.freeze
 
     def self.find(key)
-      PROTOCOL[key]
+      TYPE[key]
     end
 
   end
