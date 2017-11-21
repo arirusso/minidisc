@@ -14,16 +14,18 @@ module MiniDisc
       # @param [Hash] options
       # @option options [Integer] :timeout Timeout in seconds
       # @return [Array<Hash>]
-      def services_with_timeout(service_type, options = {})
+      def services_with_timeout(service_type, options = {}, &block)
         timeout = options.fetch(:timeout, DEFAULT_TIMEOUT_LIMIT)
-        Timeout::timeout(timeout) { services(service_type) }
+        Timeout::timeout(timeout) { services(service_type, &block) }
       rescue Timeout::Error => e
-        []
+        services = []
+        yield(services) if block_given?
+        services
       end
 
       # @param [String] service_type eg "_telnet._tcp"
       # @return [Array<Hash>]
-      def services(service_type)
+      def services(service_type, &block)
         Thread.abort_on_exception = true
         replies = {}
 
@@ -33,7 +35,7 @@ module MiniDisc
             available_replies = replies.select do |_, service|
               service.flags.add?
             end
-            return available_replies.map do |_, service|
+            services = available_replies.map do |_, service|
               resolve = service.resolve
               {
                 name: service.name,
@@ -41,11 +43,15 @@ module MiniDisc
                 port: resolve.port
               }
             end
+            yield(services) if block_given?
+            services
           end
 
         end
       rescue Errno::EBADF, DNSSD::ServiceNotRunningError
-        []
+        services = []
+        yield(services) if block_given?
+        services
       end
 
     end
