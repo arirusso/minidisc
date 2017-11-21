@@ -18,9 +18,7 @@ module MiniDisc
         timeout = options.fetch(:timeout, DEFAULT_TIMEOUT_LIMIT)
         Timeout::timeout(timeout) { services(service_type, &block) }
       rescue Timeout::Error => e
-        services = []
-        yield(services) if block_given?
-        services
+        return_empty
       end
 
       # @param [String] service_type eg "_telnet._tcp"
@@ -49,6 +47,12 @@ module MiniDisc
 
         end
       rescue Errno::EBADF, DNSSD::ServiceNotRunningError
+        return_empty
+      end
+
+      private
+
+      def return_empty
         services = []
         yield(services) if block_given?
         services
