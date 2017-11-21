@@ -30,9 +30,9 @@ module MiniDisc
       # @param [Symbol] service_type eg :telnet
       # @param [Integer] port
       def initialize(service_type, port, options = {})
-        @id = options[:id] || object_id.to_s
+        @id = options.fetch(:id, object_id.to_s)
         @port = port
-        @service_type = ServiceType.find(service_type)
+        populate_service_type(service_type, options)
       end
 
       # register this service
@@ -45,6 +45,14 @@ module MiniDisc
           end
         end
         true
+      end
+
+      private
+
+      def populate_service_type(service_type, options = {})
+        protocol = options.fetch(:protocol, :tcp).to_s
+        protocol.gsub!(/\_/, "-")
+        @service_type = "_#{service_type}._#{protocol}"
       end
 
     end

@@ -2,8 +2,8 @@ require "helper"
 
 describe MiniDisc::Registry do
   let!(:port) { 4040 }
-  let!(:protocol) { :http }
-  let(:discovery) { MiniDisc::Registry::Service.new(protocol, port) }
+  let!(:service_type) { :http }
+  let(:discovery) { MiniDisc::Registry::Service.new(service_type, port) }
 
   describe "#initialize" do
     it "populates" do
@@ -19,7 +19,7 @@ describe MiniDisc::Registry do
 
   describe "#register" do
     let(:args) do
-      [discovery.id, MiniDisc::Protocol.find(protocol), nil, port]
+      [discovery.id, "_http._tcp", nil, port]
     end
 
     before(:each) do

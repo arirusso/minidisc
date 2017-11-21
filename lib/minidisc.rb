@@ -1,7 +1,6 @@
 require "dnssd"
 
 require "minidisc/registry"
-require "minidisc/service_type"
 
 require "minidisc/discover"
 

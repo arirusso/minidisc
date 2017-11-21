@@ -4,7 +4,7 @@ describe MiniDisc::Discover::Network do
   describe "services_with_timeout" do
     let!(:start_time) { Time.now }
     before(:each) do
-      block = ->(protocol) do
+      block = ->(service_type) do
         loop {}
         :done
       end
