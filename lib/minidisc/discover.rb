@@ -31,7 +31,7 @@ module MiniDisc
       private
 
       def ensure_initialized(options)
-        @logger ||= options[:logger] || $>
+        @logger ||= options[:logger] || Logger.new(STDOUT)
         @destinations ||= []
       end
 
@@ -48,7 +48,7 @@ module MiniDisc
         services = services.map do |service|
           new("override_#{i += 1}", service[:host], port: service[:port])
         end
-        @logger.puts("Destinations: Overriding discovery with #{services.count} services")
+        @logger.info("Destinations: Overriding discovery with #{services.count} services")
         yield(services) if block_given?
         services
       end
@@ -68,7 +68,7 @@ module MiniDisc
         services = services.map do |service|
           new(service[:name], service[:target], port: service[:port])
         end
-        @logger.puts("Destinations: Discovered #{services.count} services")
+        @logger.info("Destinations: Discovered #{services.count} services")
         yield(services) if block_given?
         services
       end

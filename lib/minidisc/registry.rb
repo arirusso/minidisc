@@ -17,10 +17,7 @@ module MiniDisc
     private
 
     def ensure_logger(options = {})
-      if @logger.nil?
-        logfile = File.join("log", "registry.log")
-        @logger = options[:logger] || $> #Logger.new(logfile)
-      end
+      @logger ||= options[:logger] || Logger.new(STDOUT)
     end
 
     class Service
@@ -41,7 +38,7 @@ module MiniDisc
         DNSSD.register(@id, @service_type, nil, @port) do
           properties = "id=#{@id} port=#{@port} service_type=#{@service_type}"
           unless options[:logger].nil?
-            options[:logger].puts("MiniDisc::Registry::Service#register: #{properties}")
+            options[:logger].info("MiniDisc::Registry::Service#register: #{properties}")
           end
         end
         true
