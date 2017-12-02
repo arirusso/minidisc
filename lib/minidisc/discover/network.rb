@@ -10,30 +10,29 @@ module MiniDisc
 
       extend self
 
-      # @param [String] service_type eg "_telnet._tcp"
+      # @param [String] service_type with protocol eg "_telnet._tcp"
       # @param [Hash] options
       # @option options [Integer] :timeout Timeout in seconds
       # @return [Array<Hash>]
       def services_with_timeout(service_type, options = {}, &block)
-        timeout = options.fetch(:timeout, DEFAULT_TIMEOUT_LIMIT)
+        timeout = options[:timeout] || DEFAULT_TIMEOUT_LIMIT
         Timeout::timeout(timeout) { services(service_type, &block) }
       rescue Timeout::Error => e
         return_empty
       end
 
-      # @param [String] service_type eg "_telnet._tcp"
+      # @param [String] service_type with protocol eg "_telnet._tcp"
       # @return [Array<Hash>]
       def services(service_type, &block)
         Thread.abort_on_exception = true
         replies = {}
-
-        DNSSD.browse!(protocol) do |reply|
+        DNSSD.browse!(service_type) do |reply|
           replies[reply.name] = reply
           if !reply.flags.more_coming?
             available_replies = replies.select do |_, service|
               service.flags.add?
             end
-            services = available_replies.map do |_, service|
+            return available_replies.map do |_, service|
               resolve = service.resolve
               {
                 name: service.name,
@@ -41,8 +40,6 @@ module MiniDisc
                 port: resolve.port
               }
             end
-            yield(services) if block_given?
-            services
           end
 
         end

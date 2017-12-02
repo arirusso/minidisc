@@ -9,7 +9,7 @@ describe MiniDisc::Discover::Network do
         :done
       end
       expect(MiniDisc::Discover::Network).to(receive(:services, &block))
-      @result = MiniDisc::Discover::Network.services_with_timeout(:http)
+      @result = MiniDisc::Discover::Network.resolved_services_with_timeout(:http)
     end
 
     it "times out and returns empty array" do

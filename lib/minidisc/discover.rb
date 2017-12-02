@@ -24,6 +24,7 @@ module MiniDisc
 
       def services(service_type, options = {}, &block)
         ensure_initialized(options)
+        service_type = ServiceType.to_dnssd_service_type(service_type, options)
         discover(service_type, options, &block)
         @destinations
       end
@@ -37,7 +38,7 @@ module MiniDisc
 
       def discover(service_type, options = {}, &block)
         @destinations = if options[:override].nil?
-          from_discovery(service_type, &block)
+          from_discovery(service_type, timeout: options[:timeout], &block)
         else
           from_override(options[:override], &block)
         end
@@ -59,7 +60,7 @@ module MiniDisc
       end
 
       def from_discovery(service_type, options = {}, &block)
-        services = Network.services_with_timeout(service_type)
+        services = Network.services_with_timeout(service_type, timeout: options[:timeout])
         unless options[:id].nil?
           services.select! do |service|
             match?(options[:id], service[:name])
