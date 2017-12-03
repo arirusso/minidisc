@@ -1,8 +1,8 @@
 require "helper"
 
 describe MiniDisc::Registry do
-  let!(:port) { 4040 }
-  let!(:service_type) { :http }
+  let(:port) { 4040 }
+  let(:service_type) { :http }
   let(:discovery) { MiniDisc::Registry::Service.new(service_type, port) }
 
   describe "#initialize" do

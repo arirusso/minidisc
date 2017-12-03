@@ -4,9 +4,9 @@ describe MiniDisc::Discover do
   describe ".services" do
 
     context "from override file" do
-      let!(:host) { "something.local." }
-      let!(:port) { "80" }
-      let!(:config_service) do
+      let(:host) { "something.local." }
+      let(:port) { "80" }
+      let(:config_service) do
         {
           host: host,
           port: port
@@ -33,10 +33,10 @@ describe MiniDisc::Discover do
     end
 
     context "from discovery" do
-      let!(:name) { "minidisc-test_service" }
-      let!(:host) { "testservice.local." }
-      let!(:port) { "8080" }
-      let!(:service) do
+      let(:name) { "minidisc-test_service" }
+      let(:host) { "testservice.local." }
+      let(:port) { "8080" }
+      let(:service) do
         {
           name: name,
           target: host,
@@ -89,10 +89,10 @@ describe MiniDisc::Discover do
   end
 
   describe "#to_h" do
-    let!(:id) { "minidisc-test" }
-    let!(:host) { "test.local." }
-    let!(:port) { 8000 }
-    let!(:destination) do
+    let(:id) { "minidisc-test" }
+    let(:host) { "test.local." }
+    let(:port) { 8000 }
+    let(:destination) do
       MiniDisc::Discover.new(id, host, port: port)
     end
     let(:hash) { destination.to_h }
