@@ -4,22 +4,6 @@ module MiniDisc
 
   class Discover
 
-    attr_reader :id, :host, :port
-
-    def initialize(id, host, options = {})
-      @id = id
-      @host = host
-      @port = options.fetch(:port, 8080)
-    end
-
-    def to_h
-      {
-        id: @id,
-        host: @host,
-        port: @port
-      }
-    end
-
     class << self
 
       def services(service_type, options = {}, &block)
@@ -46,12 +30,12 @@ module MiniDisc
 
       def from_override(services, &block)
         i = 0;
-        services = services.map do |service|
-          new("override_#{i += 1}", service[:host], port: service[:port])
+        service_objects = services.map do |service|
+          Service.new("override_#{i += 1}", service[:host], port: service[:port])
         end
         @logger.info("Destinations: Overriding discovery with #{services.count} services")
-        yield(services) if block_given?
-        services
+        yield(service_objects) if block_given?
+        service_objects
       end
 
       def match?(match_on, service_name)
@@ -66,12 +50,36 @@ module MiniDisc
             match?(options[:id], service[:name])
           end
         end
-        services = services.map do |service|
-          new(service[:name], service[:target], port: service[:port])
-        end
+        service_objects = service_hashes_to_service_objects(services)
         @logger.info("Destinations: Discovered #{services.count} services")
-        yield(services) if block_given?
-        services
+        yield(service_objects) if block_given?
+        service_objects
+      end
+
+      def service_hashes_to_service_objects(services)
+        services.map do |service|
+          Service.new(service[:name], service[:target], port: service[:port])
+        end
+      end
+
+    end
+
+    class Service
+
+      attr_reader :id, :host, :port
+
+      def initialize(id, host, options = {})
+        @id = id
+        @host = host
+        @port = options.fetch(:port, 8080)
+      end
+
+      def to_h
+        {
+          id: @id,
+          host: @host,
+          port: @port
+        }
       end
 
     end

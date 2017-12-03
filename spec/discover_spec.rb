@@ -25,7 +25,7 @@ describe MiniDisc::Discover do
       it "has correct data" do
         expect(destinations.count).to(eq(1))
         destination = destinations.first
-        expect(destination).to(be_kind_of(MiniDisc::Discover))
+        expect(destination).to(be_kind_of(MiniDisc::Discover::Service))
         expect(destination.id).to(eq("override_1"))
         expect(destination.host).to(eq(host))
         expect(destination.port).to(eq(port))
@@ -61,7 +61,7 @@ describe MiniDisc::Discover do
         it "has correct data" do
           expect(destinations.count).to(eq(1))
           destination = destinations.first
-          expect(destination).to(be_kind_of(MiniDisc::Discover))
+          expect(destination).to(be_kind_of(MiniDisc::Discover::Service))
           expect(destination.id).to(eq(name))
           expect(destination.host).to(eq(host))
           expect(destination.port).to(eq(port))
@@ -79,7 +79,7 @@ describe MiniDisc::Discover do
         it "has correct data" do
           expect(destinations.count).to(eq(1))
           destination = destinations.first
-          expect(destination).to(be_kind_of(MiniDisc::Discover))
+          expect(destination).to(be_kind_of(MiniDisc::Discover::Service))
           expect(destination.id).to(eq(name))
           expect(destination.host).to(eq(host))
           expect(destination.port).to(eq(port))
@@ -93,7 +93,7 @@ describe MiniDisc::Discover do
     let(:host) { "test.local." }
     let(:port) { 8000 }
     let(:destination) do
-      MiniDisc::Discover.new(id, host, port: port)
+      MiniDisc::Discover::Service.new(id, host, port: port)
     end
     let(:hash) { destination.to_h }
 
