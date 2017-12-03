@@ -24,7 +24,7 @@ module MiniDisc
 
       def services(service_type, options = {}, &block)
         ensure_initialized(options)
-        service_type = ServiceType.to_dnssd_service_type(service_type, options)
+        service_type = ServiceType.sym_to_dnnsd_string(service_type, options)
         discover(service_type, options, &block)
         @destinations
       end

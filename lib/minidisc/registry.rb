@@ -29,7 +29,7 @@ module MiniDisc
       def initialize(service_type, port, options = {})
         @id = options.fetch(:id, object_id.to_s)
         @port = port
-        @service_type = ServiceType.to_dnssd_service_type(service_type, options)
+        @service_type = ServiceType.sym_to_dnnsd_string(service_type, options)
       end
 
       # register this service
