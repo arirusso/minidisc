@@ -16,14 +16,19 @@ module MiniDisc
       # @return [Array<Hash>]
       def services_with_timeout(service_type, options = {}, &block)
         timeout = options[:timeout] || DEFAULT_TIMEOUT_LIMIT
-        Timeout::timeout(timeout) { services(service_type, &block) }
+        Timeout::timeout(timeout) do
+          result = services(service_type, &block)
+        end
       rescue Timeout::Error => e
-        return_empty
+        result = []
+      ensure
+        yield(result) if block_given?
+        result
       end
 
       # @param [String] service_type with protocol eg "_telnet._tcp"
       # @return [Array<Hash>]
-      def services(service_type, &block)
+      def services(service_type)
         Thread.abort_on_exception = true
         replies = {}
         DNSSD.browse!(service_type) do |reply|
@@ -44,15 +49,7 @@ module MiniDisc
 
         end
       rescue Errno::EBADF, DNSSD::ServiceNotRunningError
-        return_empty
-      end
-
-      private
-
-      def return_empty
-        services = []
-        yield(services) if block_given?
-        services
+        []
       end
 
     end
