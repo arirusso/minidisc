@@ -42,6 +42,8 @@ module MiniDisc
           end
         end
         true
+      rescue Errno::EBADF
+        false
       end
 
     end
