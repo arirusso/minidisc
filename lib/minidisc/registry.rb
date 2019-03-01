@@ -32,7 +32,11 @@ module MiniDisc
         @service_type = ServiceType.sym_to_dnnsd_string(service_type, options)
       end
 
-      # register this service
+      def registered?
+        @registered
+      end
+
+      # Register this service
       # @return [Boolean]
       def register(options = {})
         DNSSD.register(@id, @service_type, nil, @port) do
@@ -41,9 +45,9 @@ module MiniDisc
             options[:logger].info("MiniDisc::Registry::Service#register: #{properties}")
           end
         end
-        true
+        @registered = true
       rescue Errno::EBADF
-        false
+        @registered = false
       end
 
     end
