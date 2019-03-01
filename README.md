@@ -4,17 +4,7 @@ Mini service discovery in Ruby
 
 ## Description
 
-I recently extracted MiniDisc from a toy project I've been working on. It offers a single line interface for common patterns in service discovery that I'd been redundantly implementing.  
-
-Under the hood, it wraps the DNSSD gem and is cross compatible with services using that.  It adds helpers for common tasks like matching services by name, dynamically overriding discovery, error handling, logging
-
-
-todo:
-what is the relationship between DNSSD and Bonjour? explain here
-what is the relationship between DNSSD, Bonjour and DNS explain here
-on what network scope are broadcasted visible? eg local network?
-what features from DNSSD are lost exactly?  explain
-what is mdns?
+MiniDisc wraps the DNSSD gem and is cross compatible with services using that.  It adds helpers for common tasks like matching services by name, dynamically overriding discovery, error handling, logging
 
 ## Requirements
 
@@ -53,4 +43,4 @@ or when Bundler, add this to your Gemfile
 
 Apache 2.0, See LICENSE file
 
-Copyright (c) 2017 [Ari Russo](http://arirusso.com)
+Copyright (c) 2017-2019 [Ari Russo](http://arirusso.com)

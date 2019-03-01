@@ -66,12 +66,18 @@ module MiniDisc
 
     class Service
 
+      include Comparable
+
       attr_reader :id, :host, :port
 
       def initialize(id, host, options = {})
         @id = id
         @host = host
         @port = options.fetch(:port, 8080)
+      end
+
+      def <=>(other)
+        to_h <=> other.to_h
       end
 
       def to_h
