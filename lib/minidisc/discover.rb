@@ -22,7 +22,7 @@ module MiniDisc
 
       def discover(service_type, options = {}, &block)
         @destinations = if options[:override].nil?
-          from_discovery(service_type, timeout: options[:timeout], &block)
+          from_discovery(service_type, id: options[:id], timeout: options[:timeout], &block)
         else
           from_override(options[:override], &block)
         end
