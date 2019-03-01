@@ -39,7 +39,7 @@ module MiniDisc
       end
 
       def match?(match_on, service_name)
-        match_on.kind_of?(Regex) && service_name.match(match_on) ||
+        match_on.kind_of?(Regexp) && service_name.match(match_on) ||
           match_on == service_name
       end
 
