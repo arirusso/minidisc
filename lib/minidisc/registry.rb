@@ -8,7 +8,7 @@ module MiniDisc
     def self.add(service_type, port, options = {})
       ensure_logger
       @services ||= []
-      service = Registry::Service.new(service_type, port, options = {})
+      service = Registry::Service.new(service_type, port, options)
       service.register(logger: @logger)
       @services << service
       service
