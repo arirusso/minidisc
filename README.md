@@ -4,7 +4,9 @@ Mini service discovery in Ruby
 
 ## Description
 
-MiniDisc wraps the DNSSD gem and is cross compatible with services using that.  It adds helpers for common tasks like matching services by name, dynamically overriding discovery, error handling, logging
+I recently extracted MiniDisc from a personal project I've been working on. It offers a single line interface for common patterns in service discovery that I'd been redundantly implementing.
+
+Under the hood it wraps the DNSSD gem and is cross compatible with services using that.  It adds helpers for common tasks like matching services by name, dynamically overriding discovery, error handling, logging
 
 ## Requirements
 
@@ -26,7 +28,7 @@ MiniDisc::Registry.add(:http, 8080, id: "my-service-instance1")
 To discover other services use
 
 ```ruby
-MiniDisc::Discover.resolve(:http, id: /^my-service/) do |services|
+MiniDisc::Discover.find_all(:http, id: /^my-service/) do |services|
   ...
 end
 ```
