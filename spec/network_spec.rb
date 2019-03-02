@@ -5,19 +5,17 @@ describe MiniDisc::Network do
     let(:port) { 4040 }
     let(:service_type) { :http }
 
-    describe "#register" do
-      let(:args) do
-        [kind_of(String), "_http._tcp", nil, port]
-      end
+    let(:args) do
+      [kind_of(String), "_http._tcp", nil, port]
+    end
 
-      before(:each) do
-        expect(DNSSD).to(receive(:register).with(*args).and_return(true))
-      end
+    before(:each) do
+      expect(DNSSD).to(receive(:register).with(*args).and_return(true))
+    end
 
-      it "registers" do
-        service = MiniDisc::Network.add(service_type, port)
-        expect(service.registered?).to(be(true))
-      end
+    it "registers a service" do
+      service = MiniDisc::Network.add(service_type, port)
+      expect(service.registered?).to(be(true))
     end
 
   end
