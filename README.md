@@ -22,13 +22,13 @@ To broadcast a service use something like:
 ```ruby
 require "minidisc"
 
-MiniDisc::Registry.add(:http, 8080, id: "my-service-instance1")
+MiniDisc::Network.add(:http, 8080, id: "my-service-instance1")
 ```
 
 To discover other services use
 
 ```ruby
-MiniDisc::Discover.find_all(:http, id: /^my-service/) do |services|
+MiniDisc::Network.find_all(:http, id: /^my-service/) do |services|
   ...
 end
 ```
